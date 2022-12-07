@@ -15,8 +15,7 @@ from selenium.webdriver.common.by import By
 import pandas as pd
 import time
 
-#get_jobs(keyword, num_jobs, verbose, path, slp_time):
-def get_jobs(keyword, num_jobs, verbose, path, slp_time):
+def get_jobs(keyword, location, num_jobs, verbose, path):
     options = Options()
     options.add_argument("window-size=1920,1080")
 
@@ -28,9 +27,9 @@ def get_jobs(keyword, num_jobs, verbose, path, slp_time):
 
     location_input = driver.find_element(By.CLASS_NAME, "loc")
     search_input.send_keys(keyword)
-    location_input.send_keys("United States")
+    location_input.send_keys(location)
     search_input.send_keys(Keys.ENTER)
-    time.sleep(slp_time)
+    time.sleep(2)
     
     
     company_name = []
@@ -56,7 +55,7 @@ def get_jobs(keyword, num_jobs, verbose, path, slp_time):
     current_page = 1     
         
         
-    time.sleep(slp_time)
+    time.sleep(3)
     
     while current_page <= num_jobs:   
         
@@ -192,7 +191,7 @@ def get_jobs(keyword, num_jobs, verbose, path, slp_time):
                 
        # Moves to the next page         
         if done:
-            print(str(current_page) + ' ' + 'out of' +' '+ str(num_jobs) + ' ' + 'pages done')
+            print(str(current_page) + ' ' + 'out of' +' '+ str(num_jobs) + ' ' + 'pages done. - ' + str(time.strftime("%H:%M:%S", time.localtime())))
             driver.find_element(By.XPATH, "//span[@alt='next-icon']").click()   
             current_page = current_page + 1
             time.sleep(4)
@@ -218,5 +217,5 @@ def get_jobs(keyword, num_jobs, verbose, path, slp_time):
     #'competitors': competitors
     })
     
-    df.to_csv(keyword + '2.csv')
+    df.to_csv(keyword + '_DD.csv')
     #return pd.DataFrame(df)
