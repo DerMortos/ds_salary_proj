@@ -1,6 +1,6 @@
 import pandas as pd
-import glassdoor_scraperUpdated as gs
+import glassdoor_scraperAncilliary as gs
 path = "/usr/bin/chromedriver"
 
 # get_jobs(keyword, num_jobs, verbose, path, slp_time)
-df = gs.get_jobs('data scientist', 1, True, path, 5)
+df = gs.fetch_jobs('data scientist', 10, False, path, 5)
