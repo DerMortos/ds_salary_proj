@@ -5,6 +5,10 @@
 # modified to work in conjunction with
 # https://github.com/rohan-benjamin/Glassdoor-Scraper-Final/blob/main/glassdoor_scraper.ipynb
 
+# code will scrape up to 24 pages, need more robust error handling
+######################################################################################################
+######################################################################################################
+
 
 from selenium import webdriver
 from shutil import which
