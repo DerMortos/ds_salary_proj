@@ -85,6 +85,10 @@ mean_absolute_error(y_test,tpred_rf)
 mean_absolute_error(y_test,(tpred_lm+tpred_rf)/2)
 
 # converting Python object into a byte stream to store it in a file/database (binary serialization)
+
+X_test.iloc[1,:]
+model.predict(X_test.iloc[1,:].values.reshape(1,-1)) # returns ~$52k, pickled obj works
+
 pickl = {'model': gs.best_estimator_}
 pickle.dump( pickl, open( 'model_file' + ".p", "wb" ) )
 
@@ -95,4 +99,4 @@ with open(file_name, 'rb') as pickled:
 
 model.predict(np.array(list(X_test.iloc[1,:])).reshape(1,-1))[0]
 
-list(X_test.iloc[1,:])
+len(list(X_test.iloc[1,:]))
