@@ -4,7 +4,7 @@ import numpy as np
 import statsmodels.api as sm
 import pickle
 from sklearn.model_selection import GridSearchCV, train_test_split, cross_val_score
-from sklearn.linear_model import LinearRegression, Lasso
+from sklearn.linear_model import LinearRegression, Lasso, Ridge
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
 
@@ -30,6 +30,9 @@ X = df_dum.drop('avg_salary', axis =1)
 y = df_dum.avg_salary.values
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
 
+###########################
+###########################
+
 # muliple linear regression
 X_sm = X = sm.add_constant(X)
 model = sm.OLS(y,X_sm)
@@ -40,7 +43,11 @@ lm.fit(X_train, y_train)
 
 np.mean(cross_val_score(lm, X_train, y_train, scoring='neg_mean_absolute_error', cv=3))
 
+
 # lasso regression
+# (Least Absolute Shrinkage and Selection Operator) L1 Regularization
+# Lasso is a modification of linear regression, where the model is penalized for the sum of absolute values of
+# the weights. Thus, the absolute values of weight will be (in general) reduced, and many will tend to be zeros
 lm_l = Lasso(alpha =.13)
 lm_l.fit(X_train,y_train)
 np.mean(cross_val_score(lm_l, X_train, y_train, scoring='neg_mean_absolute_error', cv=3))
@@ -57,10 +64,24 @@ err = tuple(zip(alpha,error))
 df_err = pd.DataFrame(err, columns = ['alpha', 'error'])
 df_err[df_err.error == max(df_err.error)]
 
+
+# ridge regression
+# L2 Regularization
+# Further penalizes the model for the sum of squared value of the weights. Thus, the weights not only tend to have
+# smaller absolute values, but also really tend to penalize the extremes of the weights, resulting in a group 
+# of weights that are more evenly distributed.
+lm_r = Ridge(alpha = .13)
+lm_r.fit(X_train, y_train)
+np.mean(cross_val_score(lm_r, X_train, y_train, scoring='neg_mean_absolute_error', cv=3))
+
+
 # random forest
 rf = RandomForestRegressor()
 np.mean(cross_val_score(rf, X_train, y_train, scoring='neg_mean_absolute_error', cv=3))
 # this score is 4-5 points less than previous model
+
+###########################
+###########################
 
 # tune random forest model with GridsearchCV 
 # [mse, mae (criterion)], & max_features deprecated
@@ -83,6 +104,9 @@ mean_absolute_error(y_test,tpred_rf)
 
 # combining models to check for possible improvement
 mean_absolute_error(y_test,(tpred_lm+tpred_rf)/2)
+
+###########################
+###########################
 
 # converting Python object into a byte stream to store it in a file/database (binary serialization)
 
