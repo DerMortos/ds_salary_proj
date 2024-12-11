@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+    <title>Model Prediction</title>
+</head>
+<body>
+        <div class="container">
+        <h1>Selection Based Estimator</h1>
+        <p><a href="/">Return to main page</a></p>
+        <h3>Company Information</h3>
+        <form id="predictionForm" onsubmit="submitPrediction()">
+            <!-- General Feature Inputs -->
+            <label for="Rating">Rating:</label>
+            <input type="text" id="Rating" name="Rating" placeholder="e.g., 0.0 up to 5.0">
+
+            <label for="num_comp">Number of Competitors:</label>
+            <select id="num_comp" name="num_comp">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+
+            <label for="hourly">Hourly:</label>
+            <select id="hourly" name="hourly">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+
+            <label for="employer_provided">Employer Provided Salary:</label>
+            <select id="employer_provided" name="employer_provided">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+
+            <label for="hq_state">Headquaters State:</label>
+            <select id="hq_state" name="hq_state">
+                <option value="AL">AL</option>
+                <option value="AZ">AZ</option>
+                <option value="CA">CA</option>
+                <option value="CO">CO</option>
+                <option value="CT">CT</option>
+                <option value="DC">DC</option>
+                <option value="DE">DE</option>
+                <option value="FL">FL</option>
+                <option value="GA">GA</option>
+                <option value="IA">IA</option>
+                <option value="ID">ID</option>
+                <option value="IL">IL</option>
+                <option value="IN">IN</option>
+                <option value="KS">KS</option>
+                <option value="KY">KY</option>
+                <option value="LA">LA</option>
+                <option value="MA">MA</option>
+                <option value="MD">MD</option>
+                <option value="MI">MI</option>
+                <option value="MN">MN</option>
+                <option value="MO">MO</option>
+                <option value="NC">NC</option>
+                <option value="NE">NE</option>
+                <option value="NJ">NJ</option>
+                <option value="NM">NM</option>
+                <option value="NY">NY</option>
+                <option value="OH">OH</option>
+                <option value="OR">OR</option>
+                <option value="PA">PA</option>
+                <option value="RI">RI</option>
+                <option value="SC">SC</option>
+                <option value="TN">TN</option>
+                <option value="TX">TX</option>
+                <option value="UT">UT</option>
+                <option value="VA">VA</option>
+                <option value="WA">WA</option>
+                <option value="WI">WI</option>
+
+            </select>
+
+            <label for="age">Years in business:</label>
+            <input type="text" id="age" name="age" placeholder="max 240">
+
+            <!-- Container for Size Options -->
+            <div class="company-size-container">
+                <h3> Size</h3>
+                <input type="radio" id="Size_-1" name="Size" value="-1">
+                <label for="Size_-1">Unknown Size</label><br>
+
+                <input type="radio" id="Size_1_to_50" name="Size" value="1 to 50 employees">
+                <label for="Size_1_to_50">1 to 50 employees</label><br>
+
+                <input type="radio" id="Size_51_to_200" name="Size" value="51 to 200 employees">
+                <label for="Size_51_to_200">51 to 200 employees</label><br>
+
+                <input type="radio" id="Size_201_to_500" name="Size" value="201 to 500 employees">
+                <label for="Size_201_to_500">201 to 500 employees</label><br>
+
+                <input type="radio" id="Size_1001_to_5000" name="Size" value="1001 to 5000 employees">
+                <label for="Size_1001_to_5000">1001 to 5000 employees</label><br>
+
+                <input type="radio" id="Size_5001_to_10000" name="Size" value="5001 to 10000 employees">
+                <label for="Size_5001_to_10000">5001 to 10000 employees</label><br>
+
+                <input type="radio" id="Size_501_to_1000" name="Size" value="501 to 1000 employees">
+                <label for="Size_501_to_1000">501 to 1000 employees</label><br>
+
+                <input type="radio" id="Size_10000_plus" name="Size" value="10000+ employees">
+                <label for="Size_10000_plus">10000+ employees</label><br>
+            </div>
+
+
+            <!-- Type of Ownership Container -->
+            <div class="ownership-container">
+                <h3>Type of Ownership</h3>
+
+                <input type="radio" id="ownership_college_university" name="ownership" value="College/University">
+                <label for="ownership_college_university">College / University</label><br>
+
+                <input type="radio" id="ownership_private" name="ownership" value="Private">
+                <label for="ownership_private">Private</label><br>
+
+                <input type="radio" id="ownership_public" name="ownership" value="Public">
+                <label for="ownership_public">Public</label><br>
+
+                <input type="radio" id="ownership_government" name="ownership" value="Government">
+                <label for="ownership_government">Government</label><br>
+
+                <input type="radio" id="ownership_hospital" name="ownership" value="Hospital">
+                <label for="ownership_hospital">Hospital</label><br>
+
+                <input type="radio" id="ownership_nonprofit" name="ownership" value="Nonprofit Organization">
+                <label for="ownership_nonprofit">Nonprofit Organization</label><br>
+
+                <input type="radio" id="ownership_other" name="ownership" value="Other">
+                <label for="ownership_other">Other</label><br>
+
+                <input type="radio" id="ownership_school_district" name="ownership" value="School District">
+                <label for="ownership_school_district">School District</label><br>
+
+                <input type="radio" id="ownership_subsidiary" name="ownership" value="Subsidiary or Business Segment">
+                <label for="ownership_subsidiary">Subsidiary or Business Segment</label><br>
+
+                <input type="radio" id="ownership_unknown" name="ownership" value="Unknown">
+                <label for="ownership_unknown">Unknown</label><br>
+            </div>
+
+            <!-- Industry Container -->
+            <div class="industry-container">
+                <h3>Industry</h3>
+
+                <input type="radio" id="industry_-1" name="industry" value="unknown">
+                <label for="industry_-1">unknown</label><br>
+
+                <input type="radio" id="industry_accounting" name="industry" value="Accounting">
+                <label for="industry_accounting">Accounting</label><br>
+
+                <input type="radio" id="industry_advertising_marketing" name="industry" value="Advertising & Marketing">
+                <label for="industry_advertising_marketing">Advertising & Marketing</label><br>
+
+                <input type="radio" id="industry_aerospace_defense" name="industry" value="Aerospace & Defense">
+                <label for="industry_aerospace_defense">Aerospace & Defense</label><br>
+
+                <input type="radio" id="industry_architectural_engineering" name="industry" value="Architectural & Engineering Services">
+                <label for="industry_architectural_engineering">Architectural & Engineering Services</label><br>
+
+                <input type="radio" id="industry_auctions_galleries" name="industry" value="Auctions & Galleries">
+                <label for="industry_auctions_galleries">Auctions & Galleries</label><br>
+
+                <input type="radio" id="industry_banks_credit_unions" name="industry" value="Banks & Credit Unions">
+                <label for="industry_banks_credit_unions">Banks & Credit Unions</label><br>
+
+                <input type="radio" id="industry_beauty_personal_accessories" name="industry" value="Beauty & Personal Accessories Stores">
+                <label for="industry_beauty_personal_accessories">Beauty & Personal Accessories Stores</label><br>
+
+                <input type="radio" id="industry_biotech_pharmaceuticals" name="industry" value="Biotech & Pharmaceuticals">
+                <label for="industry_biotech_pharmaceuticals">Biotech & Pharmaceuticals</label><br>
+
+                <input type="radio" id="industry_brokerage_services" name="industry" value="Brokerage Services">
+                <label for="industry_brokerage_services">Brokerage Services</label><br>
+
+                <input type="radio" id="industry_colleges_universities" name="industry" value="Colleges & Universities">
+                <label for="industry_colleges_universities">Colleges & Universities</label><br>
+
+                <input type="radio" id="industry_computer_hardware_software" name="industry" value="Computer Hardware & Software">
+                <label for="industry_computer_hardware_software">Computer Hardware & Software</label><br>
+
+                <input type="radio" id="industry_construction" name="industry" value="Construction">
+                <label for="industry_construction">Construction</label><br>
+
+                <input type="radio" id="industry_consulting" name="industry" value="Consulting">
+                <label for="industry_consulting">Consulting</label><br>
+
+                <input type="radio" id="industry_consumer_product_rental" name="industry" value="Consumer Product Rental">
+                <label for="industry_consumer_product_rental">Consumer Product Rental</label><br>
+
+                <input type="radio" id="industry_consumer_products_manufacturing" name="industry" value="Consumer Products Manufacturing">
+                <label for="industry_consumer_products_manufacturing">Consumer Products Manufacturing</label><br>
+
+                <input type="radio" id="industry_department_clothing_shoe_stores" name="industry" value="Department, Clothing, & Shoe Stores">
+                <label for="industry_department_clothing_shoe_stores">Department, Clothing, & Shoe Stores</label><br>
+
+                <input type="radio" id="industry_education_training_services" name="industry" value="Education Training Services">
+                <label for="industry_education_training_services">Education Training Services</label><br>
+
+                <input type="radio" id="industry_energy" name="industry" value="Energy">
+                <label for="industry_energy">Energy</label><br>
+
+                <input type="radio" id="Industry_Enterprise Software Network Solutions" name="industry" value="Enterprise Software Network Solutions">
+                <label for="Industry_Enterprise Software Network Solutions">Enterprise Software & Network Solutions</label><br>
+
+                <input type="radio" id="Industry_Farm Support Services" name="industry" value="Farm Support Services">
+                <label for="Industry_Farm Support Services">Farm Support Services</label><br>
+
+                <input type="radio" id="Industry_Federal Agencies" name="industry" value="Federal Agencies">
+                <label for="Industry_Federal Agencies">Federal Agencies</label><br>
+
+                <input type="radio" id="Industry_Financial Analytics Research" name="industry" value="Financial Analytics Research">
+                <label for="Industry_Financial Analytics Research">Financial Analytics & Research</label><br>
+
+                <input type="radio" id="Industry_Financial Transaction Processing" name="industry" value="Financial Transaction Processing">
+                <label for="Industry_Financial Transaction Processing">Financial Transaction Processing</label><br>
+
+                <input type="radio" id="Industry_Food Beverage Manufacturing" name="industry" value="Food Beverage Manufacturing">
+                <label for="Industry_Food Beverage Manufacturing">Food & Beverage Manufacturing</label><br>
+
+                <input type="radio" id="Industry_Gambling" name="industry" value="Gambling">
+                <label for="Industry_Gambling">Gambling</label><br>
+
+                <input type="radio" id="Industry_Gas Stations" name="industry" value="Gas Stations">
+                <label for="Industry_Gas Stations">Gas Stations</label><br>
+
+                <input type="radio" id="Industry_Health Care Products Manufacturing" name="industry" value="Health Care Products Manufacturing">
+                <label for="Industry_Health Care Products Manufacturing">Health Care Products Manufacturing</label><br>
+
+                <input type="radio" id="Industry_Health Care Services Hospitals" name="industry" value="Health Care Services Hospitals">
+                <label for="Industry_Health Care Services Hospitals">Health Care Services & Hospitals</label><br>
+
+                <input type="radio" id="Industry_Health Beauty Fitness" name="industry" value="Health Beauty Fitness">
+                <label for="Industry_Health Beauty Fitness">Health, Beauty, & Fitness</label><br>
+
+                <input type="radio" id="Industry_IT Services" name="industry" value="IT Services">
+                <label for="Industry_IT Services">IT Services</label><br>
+
+                <input type="radio" id="Industry_Industrial Manufacturing" name="industry" value="Industrial Manufacturing">
+                <label for="Industry_Industrial Manufacturing">Industrial Manufacturing</label><br>
+
+                <input type="radio" id="Industry_Insurance Agencies Brokerages" name="industry" value="Insurance Agencies Brokerages">
+                <label for="Industry_Insurance Agencies Brokerages">Insurance Agencies & Brokerages</label><br>
+
+                <input type="radio" id="Industry_Insurance Carriers" name="industry" value="Insurance Carriers">
+                <label for="Industry_Insurance Carriers">Insurance Carriers</label><br>
+
+                <input type="radio" id="Industry_Internet" name="industry" value="Internet">
+                <label for="Industry_Internet">Internet</label><br>
+
+                <input type="radio" id="Industry_Investment Banking Asset Management" name="industry" value="Investment Banking Asset Management">
+                <label for="Industry_Investment Banking Asset Management">Investment Banking & Asset Management</label><br>
+
+                <input type="radio" id="Industry_K-12 Education" name="industry" value="K-12 Education">
+                <label for="Industry_K-12 Education">K-12 Education</label><br>
+
+                <input type="radio" id="Industry_Lending" name="industry" value="Lending">
+                <label for="Industry_Lending">Lending</label><br>
+
+                <input type="radio" id="Industry_Logistics Supply Chain" name="industry" value="Logistics Supply Chain">
+                <label for="Industry_Logistics Supply Chain">Logistics & Supply Chain</label><br>
+
+                <input type="radio" id="Industry_Metals Brokers" name="industry" value="Metals Brokers">
+                <label for="Industry_Metals Brokers">Metals Brokers</label><br>
+
+                <input type="radio" id="Industry_Mining" name="industry" value="Mining">
+                <label for="Industry_Mining">Mining</label><br>
+
+                <input type="radio" id="Industry_Motion Picture Production Distribution" name="industry" value="Motion Picture Production Distribution">
+                <label for="Industry_Motion Picture Production Distribution">Motion Picture Production & Distribution</label><br>
+
+                <input type="radio" id="Industry_Other Retail Stores" name="industry" value="Other Retail Stores">
+                <label for="Industry_Other Retail Stores">Other Retail Stores</label><br>
+
+                <input type="radio" id="Industry_Real Estate" name="industry" value="Real Estate">
+                <label for="Industry_Real Estate">Real Estate</label><br>
+
+                <input type="radio" id="Industry_Religous Organizations" name="industry" value="Religous Organizations">
+                <label for="Industry_Religous Organizations">Religous Organizations</label><br>
+
+                <input type="radio" id="Industry_Research Development" name="industry" value="Research Development">
+                <label for="Industry_Research Development">Research & Development</label><br>
+
+                <input type="radio" id="Industry_Security Services" name="industry" value="Security Services">
+                <label for="Industry_Security Services">Security Services</label><br>
+
+                <input type="radio" id="Industry_Social Assistance" name="industry" value="Social Assistance">
+                <label for="Industry_Social Assistance">Social Assistance</label><br>
+
+                <input type="radio" id="Industry_Sporting Goods Stores" name="industry" value="Sporting Goods Stores">
+                <label for="Industry_Sporting Goods Stores">Sporting Goods Stores</label><br>
+
+                <input type="radio" id="Industry_Staffing Outsourcing" name="industry" value="Staffing Outsourcing">
+                <label for="Industry_Staffing Outsourcing">Staffing & Outsourcing</label><br>
+
+                <input type="radio" id="Industry_Stock Exchanges" name="industry" value="Stock Exchanges">
+                <label for="Industry_Stock Exchanges">Stock Exchanges</label><br>
+
+                <input type="radio" id="Industry_Telecommunications Manufacturing" name="industry" value="Telecommunications Manufacturing">
+                <label for="Industry_Telecommunications Manufacturing">Telecommunications Manufacturing</label><br>
+
+                <input type="radio" id="Industry_Telecommunications Services" name="industry" value="Telecommunications Services">
+                <label for="Industry_Telecommunications Services">Telecommunications Services</label><br>
+
+                <input type="radio" id="Industry_Transportation Equipment Manufacturing" name="industry" value="Transportation Equipment Manufacturing">
+                <label for="Industry_Transportation Equipment Manufacturing">Transportation Equipment Manufacturing</label><br>
+
+                <input type="radio" id="Industry_Transportation Management" name="industry" value="Transportation Management">
+                <label for="Industry_Transportation Management">Transportation Management</label><br>
+
+                <input type="radio" id="Industry_Travel Agencies" name="industry" value="Travel Agencies">
+                <label for="Industry_Travel Agencies">Travel Agencies</label><br>
+
+                <input type="radio" id="Industry_Trucking" name="industry" value="Trucking">
+                <label for="Industry_Trucking">Trucking</label><br>
+
+                <input type="radio" id="Industry_Video Games" name="industry" value="Video Games">
+                <label for="Industry_Video Games">Video Games</label><br>
+
+                <input type="radio" id="Industry_WholeSale" name="industry" value="WholeSale">
+                <label for="Industry_WholeSale">WholeSale</label><br>
+
+            </div>
+            <div class="sector-container">
+                <h3>Sector</h3>
+
+                <input type="radio" id="sector_-1" name="sector" value="unknown">
+                <label for="sector_-1">unknown</label><br>
+
+                <input type="radio" id="sector_accounting_legal" name="sector" value="Accounting & Legal">
+                <label for="sector_accounting_legal">Accounting & Legal</label><br>
+
+                <input type="radio" id="sector_aerospace_defense" name="sector" value="Aerospace & Defense">
+                <label for="sector_aerospace_defense">Aerospace & Defense</label><br>
+
+                <input type="radio" id="sector_agriculture_forestry" name="sector" value="Agriculture & Forestry">
+                <label for="sector_agriculture_forestry">Agriculture & Forestry</label><br>
+
+                <input type="radio" id="sector_arts_entertainment" name="sector" value="Arts, Entertainment & Recreation">
+                <label for="sector_arts_entertainment">Arts, Entertainment & Recreation</label><br>
+
+                <input type="radio" id="sector_biotech_pharmaceuticals" name="sector" value="Biotech & Pharmaceuticals">
+                <label for="sector_biotech_pharmaceuticals">Biotech & Pharmaceuticals</label><br>
+
+                <input type="radio" id="sector_business_services" name="sector" value="Business Services">
+                <label for="sector_business_services">Business Services</label><br>
+
+                <input type="radio" id="sector_construction, repair maintenance" name="sector" value="Construction, Repair & Maintenance">
+                <label for="sector_construction, repair maintenance">Construction, Repair & Maintenance</label><br>
+
+                <input type="radio" id="sector_consumer_services" name="sector" value="Consumer Services">
+                <label for="sector_consumer_services">Consumer Services</label><br>
+
+                <input type="radio" id="sector_education" name="sector" value="Education">
+                <label for="sector_education">Education</label><br>
+
+                <input type="radio" id="sector_finance" name="sector" value="Finance">
+                <label for="sector_finance">Finance</label><br>
+
+                <input type="radio" id="sector_government" name="sector" value="Government">
+                <label for="sector_government">Government</label><br>
+
+                <input type="radio" id="sector_health care" name="sector" value="Health Care">
+                <label for="sector_health care">Health Care</label><br>
+
+                <input type="radio" id="sector_information technology" name="sector" value="Information Technology">
+                <label for="sector_information technology">Information Technology</label><br>
+
+                <input type="radio" id="sector_insurance" name="sector" value="Insurance">
+                <label for="sector_insurance">Insurance</label><br>
+
+                <input type="radio" id="sector_manufacturing" name="sector" value="Manufacturing">
+                <label for="sector_manufacturing">Manufacturing</label><br>
+
+                <input type="radio" id="sector_media" name="sector" value="Media">
+                <label for="sector_media">Media</label><br>
+
+                <input type="radio" id="sector_mining_&_metals" name="sector" value="Mining & Metals">
+                <label for="sector_mining_&_metals">Mining & Metals</label><br>
+
+                <input type="radio" id="sector_non-profit" name="sector" value="Non-Profit">
+                <label for="sector_non-profit">Non-Profit</label><br>
+
+                <input type="radio" id="sector_oil_gas_energy_utilities" name="sector" value="Oil, Gas, Energy & Utilities">
+                <label for="sector_oil_gas_energy_utilities">Oil, Gas, Energy & Utilities</label><br>
+
+                <input type="radio" id="sector_real_estate" name="sector" value="Real Estate">
+                <label for="sector_real_estate">Real Estate</label><br>
+
+                <input type="radio" id="sector_retail" name="sector" value="Retail">
+                <label for="sector_retail">Retail</label><br>
+
+                <input type="radio" id="sector_telecommunications" name="sector" value="Telecommunications">
+                <label for="sector_telecommunications">Telecommunications</label><br>
+
+                <input type="radio" id="sector_transportation_logistics" name="sector" value="Transportation & Logistics">
+                <label for="sector_transportation_logistics">Transportation & Logistics</label><br>
+
+                <input type="radio" id="sector_travel_tourism" name="sector" value="Travel & Tourism">
+                <label for="sector_travel_tourism">Travel & Tourism</label><br>
+
+                <!-- Continue similarly for other sectors -->
+
+            </div>
+
+            <div class="revenue-container">
+                <h3>Revenue (USD)</h3>
+
+                <input type="radio" id="revenue_-1" name="revenue" value="Unknown">
+                <label for="revenue_-1">Unknown</label><br>
+
+                <input type="radio" id="revenue_less_than_1_million" name="revenue" value="Less than $1 million">
+                <label for="revenue_less_than_1_million">Less than $1 million</label><br>
+
+                <input type="radio" id="revenue_1_to_5_million" name="revenue" value="$1 to $5 million">
+                <label for="revenue_1_to_5_million">$1 to $5 million</label><br>
+
+                <input type="radio" id="revenue_5_to_10_million" name="revenue" value="$5 to $10 million">
+                <label for="revenue_5_to_10_million">$5 to $10 million</label><br>
+
+                <input type="radio" id="revenue_10_to_25_million" name="revenue" value="$10 to $25 million">
+                <label for="revenue_10_to_25_million">$10 to $25 million</label><br>
+
+                <input type="radio" id="revenue_25_to_50_million" name="revenue" value="$25 to $50 million">
+                <label for="revenue_25_to_50_million">$25 to 50 million</label><br>
+
+                <input type="radio" id="revenue_50_to_100_million" name="revenue" value="$50 to $100 million">
+                <label for="revenue_50_to_100_million">$50 to $100 million</label><br>
+
+                <input type="radio" id="revenue_100_to_500_million" name="revenue" value="$100 to $500 million">
+                <label for="revenue_100_to_500_million">$100 to $500 million</label><br>
+
+                <input type="radio" id="revenue_500 million to 1 billion" name="revenue" value="$500 million to $1 billion">
+                <label for="revenue_500 million to 1 billion">$500 million to $1 billion</label><br>
+
+                <input type="radio" id="revenue_1_to_2_billion" name="revenue" value="$1 to $2 billion">
+                <label for="revenue_1_to_2_billion">$1 to $2 billion</label><br>
+
+                <input type="radio" id="revenue_2_to_5_billion" name="revenue" value="$2 to $5 billion">
+                <label for="revenue_2_to_5_billion">$2 to $5 billion</label><br>
+
+                <input type="radio" id="revenue_5_to_10_billion" name="revenue" value="$5 to $10 billion">
+                <label for="revenue_5_to_10_billion">$5 to $10 billion</label><br>
+
+                <input type="radio" id="revenue_10_plus_billion" name="revenue" value="$10+ billion">
+                <label for="revenue_10_plus_billion">$10+ billion</label><br>
+
+                <!-- Continue similarly for other revenue options -->
+            </div>
+
+            <div class="state-container">
+            <h3>State</h3>
+
+            <input type="radio" id="job_state_AL" name="job_state" value="AL">
+            <label for="job_state_AL">Alabama(AL)</label><br>
+
+            <input type="radio" id="job_state_AZ" name="job_state" value="AZ">
+            <label for="job_state_AZ">Arizona(AZ)</label><br>
+
+            <input type="radio" id="job_state_CA" name="job_state" value="CA">
+            <label for="job_state_CA">California(CA)</label><br>
+
+            <input type="radio" id="job_state_CO" name="job_state" value="CO">
+            <label for="job_state_CO">Colorado(CO)</label><br>
+
+            <input type="radio" id="job_state_CT" name="job_state" value="CT">
+            <label for="job_state_CT">Connecticut(CT)</label><br>
+
+            <input type="radio" id="job_state_DC" name="job_state" value="DC">
+            <label for="job_state_DC">District of Columbia(DC)</label><br>
+
+            <input type="radio" id="job_state_DE" name="job_state" value="DE">
+            <label for="job_state_DE">Delaware(DE)</label><br>
+
+            <input type="radio" id="job_state_FL" name="job_state" value="FL">
+            <label for="job_state_FL">Florida(FL)</label><br>
+
+            <input type="radio" id="job_state_GA" name="job_state" value="GA">
+            <label for="job_state_GA">Georgia(GA)</label><br>
+
+            <input type="radio" id="job_state_IA" name="job_state" value="IA">
+            <label for="job_state_IA">Iowa(IA)</label><br>
+
+            <input type="radio" id="job_state_ID" name="job_state" value="ID">
+            <label for="job_state_ID">Idaho(ID)</label><br>
+
+            <input type="radio" id="job_state_IL" name="job_state" value="IL">
+            <label for="job_state_IL">Illinois(IL)</label><br>
+
+            <input type="radio" id="job_state_IN" name="job_state" value="IN">
+            <label for="job_state_IN">Indiana(IN)</label><br>
+
+            <input type="radio" id="job_state_KS" name="job_state" value="KS">
+            <label for="job_state_KS">Kansas(KS)</label><br>
+
+            <input type="radio" id="job_state_KY" name="job_state" value="KY">
+            <label for="job_state_KY">Kentucky(KY)</label><br>
+
+            <input type="radio" id="job_state_LA" name="job_state" value="LA">
+            <label for="job_state_LA">Louisiana(LA)</label><br>
+
+            <input type="radio" id="job_state_MA" name="job_state" value="MA">
+            <label for="job_state_MA">Massachusetts(MA)</label><br>
+
+            <input type="radio" id="job_state_MD" name="job_state" value="MD">
+            <label for="job_state_MD">Maryland(MD)</label><br>
+
+            <input type="radio" id="job_state_MI" name="job_state" value="MI">
+            <label for="job_state_MI">Michigan(MI)</label><br>
+
+            <input type="radio" id="job_state_MN" name="job_state" value="MN">
+            <label for="job_state_MN">Minnesota(MN)</label><br>
+
+            <input type="radio" id="job_state_MO" name="job_state" value="MO">
+            <label for="job_state_MO">Missouri(MO)</label><br>
+
+            <input type="radio" id="job_state_NC" name="job_state" value="NC">
+            <label for="job_state_NC">North Carolina(NC)</label><br>
+
+            <input type="radio" id="job_state_NE" name="job_state" value="NE">
+            <label for="job_state_NE">Nebraska(NE)</label><br>
+
+            <input type="radio" id="job_state_NJ" name="job_state" value="NJ">
+            <label for="job_state_NJ">New Jersey(NJ)</label><br>
+
+            <input type="radio" id="job_state_NM" name="job_state" value="NM">
+            <label for="job_state_NM">New Mexico(NM)</label><br>
+
+            <input type="radio" id="job_state_NV" name="job_state" value="NV">
+            <label for="job_state_NV">Nevada(NV)</label><br>
+
+            <input type="radio" id="job_state_NY" name="job_state" value="NY">
+            <label for="job_state_NY">New York(NY)</label><br>
+
+            <input type="radio" id="job_state_OH" name="job_state" value="OH">
+            <label for="job_state_OH">Ohio(OH)</label><br>
+
+            <input type="radio" id="job_state_OR" name="job_state" value="OR">
+            <label for="job_state_OR">Oregon(OR)</label><br>
+
+            <input type="radio" id="job_state_PA" name="job_state" value="PA">
+            <label for="job_state_PA">Pennsylvania(PA)</label><br>
+
+            <input type="radio" id="job_state_RI" name="job_state" value="RI">
+            <label for="job_state_RI">Rhode Island(RI)</label><br>
+
+            <input type="radio" id="job_state_SC" name="job_state" value="SC">
+            <label for="job_state_SC">South Carolina(SC)</label><br>
+
+            <input type="radio" id="job_state_TN" name="job_state" value="TN">
+            <label for="job_state_TN">Tennessee(TN)</label><br>
+
+            <input type="radio" id="job_state_TX" name="job_state" value="TX">
+            <label for="job_state_TX">Texas(TX)</label><br>
+
+            <input type="radio" id="job_state_UT" name="job_state" value="UT">
+            <label for="job_state_UT">Utah(UT)</label><br>
+
+            <input type="radio" id="job_state_VA" name="job_state" value="VA">
+            <label for="job_state_VA">Virginia(VA)</label><br>
+
+            <input type="radio" id="job_state_WA" name="job_state" value="WA">
+            <label for="job_state_WA">Washington(WA)</label><br>
+
+            <input type="radio" id="job_state_WI" name="job_state" value="WI">
+            <label for="job_state_WI">Wisconsin(WI)</label><br>
+
+
+        </div>
+
+        <div class="container-position">
+            <h3>Position Desired</h3>
+
+            <input type="radio" id="position_analyst" name="position" value="Analyst">
+            <label for="position_analyst">Analyst</label><br>
+
+            <input type="radio" id="position_data_engineer" name="position" value="Data Engineer">
+            <label for="position_data_engineer">Data Engineer</label><br>
+
+            <input type="radio" id="position_data_scientist" name="position" value="Data Scientist">
+            <label for="position_data_scientist">Data Scientist</label><br>
+
+            <input type="radio" id="position_mle" name="position" value="Machine Learning Engineer">
+            <label for="position_mle">Machine Learning Engineer</label><br>
+
+            <input type="radio" id="position_manager" name="position" value="Manager">
+            <label for="position_manager">Manager</label><br>
+
+            <input type="radio" id="position_director" name="position" value="Director">
+            <label for="position_director">Director</label><br>
+
+            <input type="radio" id="position_na" name="position" value="Unknown">
+            <label for="position_na">Unknown</label><br>
+
+        </div>
+
+        <div class="experience-container">
+            <h3>Experience Level</h3>
+
+            <input type="radio" id="seniority_jr" name="experience" value="Junior">
+            <label for="seniority_jr">Junior</label><br>
+
+            <input type="radio" id="seniority_sr" name="experience" value="Senior">
+            <label for="seniority_sr">Senior</label><br>
+
+            <input type="radio" id="seniority_na" name="experience" value="NA">
+            <label for="seniority_na">N/A</label><br>
+
+        </div>
+<!--            <form action="/predict" method="post">-->
+<!--            <button type="submit">Submit</button>-->
+            <button onclick="submitPrediction()">Predict</button>
+        </form>
+
+    </div>
+
+
+    </div>
+    <p id="result"></p>
+
+    <script>
+    function submitPrediction(event) {
+        // Define the ordered list of features (ensure these match the model's training features)
+        const generalFeatures = [
+            'const', 'Rating', 'num_comp', 'hourly', 'employer_provided', 'hq_state', 'age', 'python_yn',
+             'spark', 'excel', 'desc_len', 'Size_-1', 'Size_1_to_50_employees', 'Size_10000_plus_employees',
+             'Size_1001_to_5000_employees', 'Size_201_to_500_employees', 'Size_5001_to_10000_employees',
+             'Size_501_to_1000_employees', 'Size_51_to_200_employees', 'Size_Unknown',
+             'Type of ownership_-1', 'Type of ownership_College / University', 'ownership_private', 'ownership-public',
+             'ownership_government', 'ownership_hospital', 'ownership_nonprofit', 'ownership_Other', 'ownership_school',
+             'ownership_subsidiary', 'ownership_unknown', 'industry_-1',
+             'industry_accounting', 'industry_advertising_marketing', 'industry_aerospace_defense',
+             'industry_architectural_engineering', 'industry_auctions_Galleries',
+             'industry_banks_credit_unions', 'industry_beauty_personal_accessories',
+             'industry_biotech_pharmaceuticals', 'industry_brokerage_services',
+             'industry_colleges_universities', 'industry_computer_hardware_software',
+             'industry_construction', 'industry_consulting', 'industry_consumer_product_rental',
+             'industry_consumer_products_manufacturing', 'industry_department_clothing_shoe_stores',
+             'industry_education_training_services', 'industry_energy',
+             'Industry_Enterprise Software Network Solutions', 'Industry_Farm Support Services',
+             'Industry_Federal Agencies', 'Industry_Financial Analytics & Research',
+             'Industry_Financial Transaction Processing', 'Industry_Food & Beverage Manufacturing',
+             'Industry_Gambling', 'Industry_Gas Stations', 'Industry_Health Care Products Manufacturing',
+             'Industry_Health Care Services & Hospitals', 'Industry_Health, Beauty, & Fitness',
+             'Industry_IT Services', 'Industry_Industrial Manufacturing',
+             'Industry_Insurance Agencies & Brokerages', 'Industry_Insurance Carriers', 'Industry_Internet',
+             'Industry_Investment Banking & Asset Management', 'Industry_K-12 Education',
+             'Industry_Lending', 'Industry_Logistics & Supply Chain', 'Industry_Metals Brokers',
+             'Industry_Mining', 'Industry_Motion Picture Production & Distribution',
+             'Industry_Other Retail Stores', 'Industry_Real Estate', 'Industry_Religious Organizations',
+             'Industry_Research & Development', 'Industry_Security Services', 'Industry_Social Assistance',
+             'Industry_Sporting Goods Stores', 'Industry_Staffing & Outsourcing',
+             'Industry_Stock Exchanges', 'Industry_TV Broadcast & Cable Networks',
+             'Industry_Telecommunications Manufacturing', 'Industry_Telecommunications Services',
+             'Industry_Transportation Equipment Manufacturing', 'Industry_Transportation Management',
+             'Industry_Travel Agencies', 'Industry_Trucking', 'Industry_Video Games', 'Industry_Wholesale',
+             'Sector_-1', 'sector_accounting_legal', 'sector_aerospace_defense',
+             'sector_agriculture_forestry', 'sector_arts_entertainment',
+             'sector_biotech_pharmaceuticals', 'sector_business_services',
+             'sector_construction, repair maintenance', 'sector_consumer_services', 'sector_education',
+             'sector_finance', 'sector_government', 'sector_health care', 'sector_information technology',
+             'sector_insurance', 'sector_manufacturing', 'sector_media', 'sector_mining metals',
+             'sector_non-profit', 'sector_oil, gas, energy utilities', 'sector_real estate',
+             'sector_retail', 'sector_telecommunications', 'sector_transportation logistics',
+             'Sector_Travel & Tourism', 'revenue_1_to_2_billion', 'revenue_1_to_5_million',
+             'revenue_10_to_25 million', 'revenue_10_plus_billion',
+             'revenue_100_to_500_million', 'revenue_2_to_5 billion',
+             'revenue_25_to_50_million', 'revenue_5_to_10_billion',
+             'revenue_5_to_10 million', 'revenue_50_to_100_million',
+             'revenue_500_million_to_1_billion', 'revenue_-1', 'revenue_less_than_1_million',
+             'revenue_Unknown', 'job_state_AL', 'job_state_AZ', 'job_state_CA',
+             'job_state_CO', 'job_state_CT', 'job_state_DC', 'job_state_DE', 'job_state_FL', 'job_state_GA',
+             'job_state_IA', 'job_state_ID', 'job_state_IL', 'job_state_IN', 'job_state_KS', 'job_state_KY',
+             'job_state_LA', 'job_state_MA', 'job_state_MD', 'job_state_MI', 'job_state_MN', 'job_state_MO',
+             'job_state_NC', 'job_state_NE', 'job_state_NJ', 'job_state_NM', 'job_state_NY', 'job_state_OH',
+             'job_state_OR', 'job_state_PA', 'job_state_RI', 'job_state_SC', 'job_state_TN', 'job_state_TX',
+             'job_state_UT', 'job_state_VA', 'job_state_WA', 'job_state_WI', 'position_analyst',
+             'position_data engineer', 'position_data scientist', 'position_director', 'position_manager',
+             'position_mle', 'position_na', 'seniority_jr', 'seniority_na', 'seniority_senior'
+        ];
+
+        // Get form data
+        const formData = new FormData(document.getElementById('predictionForm'));
+
+        // Map form data to the general features array
+        const inputValues = generalFeatures.map(feature => {
+            if (feature === 'const') {
+                return 1; // Assuming 'const' is a constant value of 1
+            }
+            const value = formData.get(feature);
+            return value ? Number(value) : 0; // Default to 0 if value is not provided
+        });
+
+        fetch('http://127.0.0.1:5000/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ input: inputValues })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('result').innerText = `Prediction Result: ${data.response}`;
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            document.getElementById('result').innerText = `Error: ${error.message}`;
+        });
+    }
+</script>
+
+</body>
+</html>

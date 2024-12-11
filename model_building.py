@@ -20,23 +20,28 @@ df = pd.read_csv('eda_data.csv')
 
 # choose relevant columns
 df.columns
-df_model = df[['avg_salary','Rating', 'Size', 'Type of ownership', 'Industry', 'Sector', 'Revenue', 'num_comp', 'hourly', 'employer_provided', 'job_state', 'same_state', 'age', 'python_yn', 'spark', 'excel', 'job_simp', 'seniority', 'desc_len']]
+df_model = df[['avg_salary','Rating', 'Size', 'Type of ownership', 'Industry', 'Sector', 'Revenue', 'num_comp', 'hourly', 'employer_provided',
+               'job_state', 'same_state', 'age', 'python_yn', 'spark', 'excel', 'job_simp', 'seniority', 'desc_len']]
 
 # get dummy data
 df_dum = pd.get_dummies(df_model)
 
-# train test split
+
+#Add constant to X_sm
 X = df_dum.drop('avg_salary', axis =1)
 y = df_dum.avg_salary.values
+X_sm = X = sm.add_constant(X)
+
+# train test split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
 
 ###########################
 ###########################
 
-# muliple linear regression
-X_sm = X = sm.add_constant(X)
-model = sm.OLS(y,X_sm)
-model.fit().summary()
+# multiple linear regression
+# X_sm = X = sm.add_constant(X)     #constant added prior to test split in order to maintain array shapes
+model = sm.OLS(y,X_sm).fit()
+model.summary()
 
 lm = LinearRegression()
 lm.fit(X_train, y_train)
@@ -55,20 +60,19 @@ alpha = []
 error = []
 
 for i in range(1,100):
-    alpha.append(i/100)
-    lml = Lasso(alpha=(i/100))
-    error.append(np.mean(cross_val_score(lml,X_train,y_train, scoring = 'neg_mean_absolute_error', cv= 3)))    
+    alpha.append(i/10)
+    lml = Lasso(alpha=(i/10))
+    error.append(np.mean(cross_val_score(lml,X_train,y_train, scoring = 'neg_mean_absolute_error', cv= 3)))
 plt.plot(alpha,error)
 
 err = tuple(zip(alpha,error))
 df_err = pd.DataFrame(err, columns = ['alpha', 'error'])
 df_err[df_err.error == max(df_err.error)]
 
-
 # ridge regression
 # L2 Regularization
 # Further penalizes the model for the sum of squared value of the weights. Thus, the weights not only tend to have
-# smaller absolute values, but also really tend to penalize the extremes of the weights, resulting in a group 
+# smaller absolute values, but also really tend to penalize the extremes of the weights, resulting in a group
 # of weights that are more evenly distributed.
 lm_r = Ridge(alpha = .13)
 lm_r.fit(X_train, y_train)
@@ -83,10 +87,10 @@ np.mean(cross_val_score(rf, X_train, y_train, scoring='neg_mean_absolute_error',
 ###########################
 ###########################
 
-# tune random forest model with GridsearchCV 
+# tune random forest model with GridsearchCV
 # [mse, mae (criterion)], & max_features deprecated
 parameters = {'n_estimators': range(10,300,10), 'criterion':('squared_error','absolute_error')}
-gs = GridSearchCV(rf,parameters, scoring='neg_mean_absolute_error', cv=3)
+gs = GridSearchCV(rf,parameters, scoring='neg_mean_absolute_error', cv=3, n_jobs=-1)
 gs.fit(X_train,y_train)
 
 gs.best_score_
@@ -105,22 +109,27 @@ mean_absolute_error(y_test,tpred_rf)
 # combining models to check for possible improvement
 mean_absolute_error(y_test,(tpred_lm+tpred_rf)/2)
 
+
 ###########################
 ###########################
 
 # converting Python object into a byte stream to store it in a file/database (binary serialization)
 
-X_test.iloc[1,:]
+
 model.predict(X_test.iloc[1,:].values.reshape(1,-1)) # returns ~$52k, pickled obj works
 
 pickl = {'model': gs.best_estimator_}
-pickle.dump( pickl, open( 'model_file' + ".p", "wb" ) )
+with open('model_file.pkl', 'wb') as file:
+    pickle.dump(pickl, file)
 
-file_name = "model_file.p"
+
+
+file_name = "model_file.pkl"
 with open(file_name, 'rb') as pickled:
     data = pickle.load(pickled)
     model = data['model']
 
-model.predict(np.array(list(X_test.iloc[1,:])).reshape(1,-1))[0]
-
+model.predict(X_test.iloc[1,:].values.reshape(1,-1))
+X_test.iloc[1,:].values
+#list(X_test.iloc[1,:]) # returns 1D array, data_in of FlaskAPI/data_input.py (for prediction)
 len(list(X_test.iloc[1,:]))
